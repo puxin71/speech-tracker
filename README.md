@@ -1,6 +1,13 @@
 ## Synopsis
 
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
+This application is a simple REST API server that exposes endpoints to allow accessing and manipulating the "talk" database records. The operations that the endpoint will allow include:
+* Fetching all talks and their attendants
+* Fetching one talk and its attendees
+
+## API Reference
+The APIs should:
+* Fetch all talks and their attendants in response to a valid GET request at /talks
+* Fetch all attendees that are registered to a talk in response to a valid GET request at /talks/[0-9]+/attendees
 
 ## Code Example
 
@@ -12,12 +19,12 @@ A short description of the motivation behind the creation and maintenance of the
 
 ## Installation
 
-Provide code examples and explanations of how to get the project.
+For the short term, you have to fetch the sour code from the [Github repo] (https://github.com/puxin71/speech-tracker) and run it as:
+```
+RESOURCES="./resources" go run server.go
+```
 
-## API Reference
-
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
-
+Eventually we can launch the server using Docker
 ## Tests
 
 Describe and show how to run the tests with code examples.
