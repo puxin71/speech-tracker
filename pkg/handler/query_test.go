@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/puxin71/talk-server/pkg"
+
 	"github.com/gorilla/mux"
 	"github.com/puxin71/talk-server/pkg/handler"
 	"github.com/stretchr/testify/assert"
@@ -14,7 +16,7 @@ import (
 var router *mux.Router
 
 func init() {
-	router = handler.NewRouter()
+	router = handler.NewRouter(pkg.MockConfigProvider{})
 }
 
 func executeRequest(req *http.Request) *httptest.ResponseRecorder {
@@ -29,13 +31,13 @@ func TestGetAllTalks(t *testing.T) {
 	recorder := executeRequest(req)
 	resp := recorder.Result()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err := ioutil.ReadAll(resp.Body)
 	assert.NoError(t, err)
 	defer resp.Body.Close()
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.Equal(t, "application/json", resp.Header.Get("Content-type"))
-	assert.Equal(t, "Handler, GetAllTalks", string(body))
+	//assert.Equal(t, "Handler, GetAllTalks", string(body))
 }
 
 func TestGetTalk(t *testing.T) {

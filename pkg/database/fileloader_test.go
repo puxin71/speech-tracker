@@ -1,41 +1,35 @@
 package database_test
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
 	"time"
 
+	"github.com/puxin71/talk-server/pkg"
 	"github.com/puxin71/talk-server/pkg/database"
 
 	"github.com/stretchr/testify/assert"
 )
-
-func getFileName() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return filepath.Join(dir, "..", "resources", "dataset.json")
-}
 
 func parseTime(timeStr string) time.Time {
 	t, _ := time.Parse(time.RFC3339, timeStr)
 	return t
 }
 
-func TestGetFileName(t *testing.T) {
-	filePath := getFileName()
+func TestGetJSONFile(t *testing.T) {
+	filePath := database.NewFileLoader(pkg.MockConfigProvider{}).Filename
+	fmt.Println(filePath)
 	assert.Equal(t, "dataset.json", filepath.Base(filePath))
 	_, err := os.Stat(filePath)
 	assert.NoError(t, err)
 }
 
-func TestGetAll(t *testing.T) {
-	loader := database.NewFileLoader(getFileName())
-	talks, err := loader.GetAll()
+func TestGetAllTalks(t *testing.T) {
+	loader := database.NewFileLoader(pkg.MockConfigProvider{})
+	talks, err := loader.GetAllTalks()
 	assert.NoError(t, err)
 
 	expected := []database.Talk{

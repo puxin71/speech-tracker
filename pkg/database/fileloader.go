@@ -5,27 +5,31 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
+
+	"github.com/puxin71/talk-server/pkg"
 )
 
 // Loading the dataset from local json files
 type FileLoader struct {
-	filename string
+	Filename string
 }
 
 // Instantiate the file loader
-func NewFileLoader(file string) FileLoader {
-	return FileLoader{filename: file}
+func NewFileLoader(config pkg.ConfigProvider) FileLoader {
+	dir := config.GetResourcePath()
+	return FileLoader{Filename: filepath.Join(dir, "dataset.json")}
 }
 
 // Load all the dataset into memory
-func (l FileLoader) GetAll() ([]Talk, error) {
+func (l FileLoader) GetAllTalks() ([]Talk, error) {
 	var err error
 	talks := make([]Talk, 0)
 
 	// Open the json file
-	jsonfile, err := os.Open(l.filename)
+	jsonfile, err := os.Open(l.Filename)
 	if err != nil {
-		log.Println("failed to open file: ", l.filename, ", error: ", err)
+		log.Println("failed to open file: ", l.Filename, ", error: ", err)
 	}
 	defer jsonfile.Close()
 
@@ -47,4 +51,8 @@ func updateRole(talks []Talk) {
 	for i := range talks {
 		talks[i].Speaker.Role = SPEAKER
 	}
+}
+
+func GetJSONFile() string {
+	return "dataset.json"
 }

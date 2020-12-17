@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/puxin71/talk-server/pkg"
 	"github.com/puxin71/talk-server/pkg/handler"
 )
 
@@ -15,7 +16,7 @@ func main() {
 	idleConnsClosed := make(chan struct{})
 
 	// Configure server routes
-	router := handler.NewRouter()
+	router := handler.NewRouter(pkg.NewEnvReader())
 	http.Handle("/", router)
 	server := http.Server{
 		Handler: router,
