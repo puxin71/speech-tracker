@@ -2,14 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 
 	"github.com/puxin71/talk-server/pkg/handler"
-	"github.com/puxin71/talk-server/pkg/middleware"
 )
 
 func main() {
@@ -17,12 +15,10 @@ func main() {
 	idleConnsClosed := make(chan struct{})
 
 	// Configure server routes
-	mux := http.NewServeMux()
-	mux.Handle("/", middleware.Logger(handler.Home{}, "index"))
-	//mux.Handle("/", handler.Query{})
-
+	router := handler.NewRouter()
+	http.Handle("/", router)
 	server := http.Server{
-		Handler: mux,
+		Handler: router,
 		Addr:    addr,
 	}
 
@@ -32,17 +28,18 @@ func main() {
 		<-sigint
 
 		// We received an interrupt signal, shut down.
+		log.Println("Shutting down the server")
 		if err := server.Shutdown(context.Background()); err != nil {
 			// Error from closing listeners, or context timeout:
-			log.Printf("HTTP server Shutdown: %v", err)
+			log.Printf("HTTP server Shutdown, error: %v", err)
 		}
 		close(idleConnsClosed)
 	}()
 
-	fmt.Println("Starting server and listens on " + addr)
+	log.Println("Starting server and listens on " + addr)
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
 		// Error starting or closing listener:
-		log.Fatalf("HTTP server ListenAndServe: %v", err)
+		log.Fatalf("HTTP server ListenAndServe, error: %v", err)
 	}
 
 	<-idleConnsClosed
