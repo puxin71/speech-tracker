@@ -1,6 +1,7 @@
 package database
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -52,4 +53,27 @@ type Attendant struct {
 	Role RoleType
 	// A short biography of the attendant
 	Bio string `json:"bio"`
+}
+
+// Custom Json Marshal to ignore the Role field
+func (a Attendant) MarshalJSON() ([]byte, error) {
+	var tmp struct {
+		Name       string `json:"name"`
+		Company    string `json:"company"`
+		Email      string `json:"email"`
+		Registered string `json:"registered"`
+		Bio        string `json:"bio"`
+	}
+
+	tmp.Name = a.Name
+	tmp.Company = a.Company
+	tmp.Email = a.Email
+	tmp.Registered = format(a.Registered)
+	tmp.Bio = a.Bio
+	return json.Marshal(&tmp)
+}
+
+// Always display the time with the RFC3339 format
+func format(t time.Time) string {
+	return t.Format(time.RFC3339)
 }
