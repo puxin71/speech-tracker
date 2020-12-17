@@ -10,7 +10,7 @@ import (
 func NewRouter(config pkg.ConfigProvider) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/talks", NewQuery(database.NewFileLoader(config)).GetAllTalks).Methods("GET")
-	router.HandleFunc("/talks/{id:[0-9]+}", NewQuery(database.NewFileLoader(config)).GetTalk).Methods("GET")
+	router.HandleFunc("/talks/{id:[0-9]+}/attendees", NewQuery(database.NewFileLoader(config)).GetTalkAttendees).Methods("GET")
 
 	router.HandleFunc("/", Home)
 

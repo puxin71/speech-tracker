@@ -2,12 +2,17 @@ package database
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/puxin71/talk-server/pkg"
+)
+
+var (
+	ErrInvalidTalkID = errors.New("Invalid talk ID")
 )
 
 // Loading the dataset from local json files
@@ -21,7 +26,7 @@ func NewFileLoader(config pkg.ConfigProvider) FileLoader {
 	return FileLoader{Filename: filepath.Join(dir, "dataset.json")}
 }
 
-// Load all the dataset into memory
+// Retrieve all the talks and attendants information
 func (l FileLoader) GetAllTalks() ([]Talk, error) {
 	var err error
 	talks := make([]Talk, 0)
@@ -45,6 +50,30 @@ func (l FileLoader) GetAllTalks() ([]Talk, error) {
 	updateRole(talks)
 
 	return talks, err
+}
+
+// Retrieve all the attendees that are registered to a talk
+func (l FileLoader) GetAttendees(tkid int) ([]Attendant, error) {
+	var attendees []Attendant = make([]Attendant, 0)
+
+	talks, err := l.GetAllTalks()
+	if err != nil {
+		log.Println("fail to load data from file: ", l.Filename)
+		return attendees, err
+	}
+
+	if tkid >= len(talks) {
+		log.Println("detect out of bound talk ID, id: ", tkid)
+		return attendees, ErrInvalidTalkID
+	}
+
+	for i, talk := range talks {
+		if i == tkid {
+			return talk.Attendees, nil
+		}
+	}
+
+	return attendees, ErrInvalidTalkID
 }
 
 func updateRole(talks []Talk) {

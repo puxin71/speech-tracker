@@ -40,16 +40,15 @@ func TestGetAllTalks(t *testing.T) {
 	//assert.Equal(t, "Handler, GetAllTalks", string(body))
 }
 
-func TestGetTalk(t *testing.T) {
-	req, _ := http.NewRequest("GET", "/talks/10", nil)
+func TestGetTalkAttendees(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/talks/0/attendees", nil)
 	recorder := executeRequest(req)
 	resp := recorder.Result()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err := ioutil.ReadAll(resp.Body)
 	assert.NoError(t, err)
 	defer resp.Body.Close()
 
 	assert.Equal(t, 200, resp.StatusCode)
 	assert.Equal(t, "application/json", resp.Header.Get("Content-type"))
-	assert.Equal(t, []byte("Handler, GetTalk with vars: 10"), body)
 }

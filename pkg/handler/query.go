@@ -2,9 +2,10 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 
@@ -21,21 +22,9 @@ func NewQuery(db database.DB) Query {
 	return Query{db: db}
 }
 
-func updateHeader(w http.ResponseWriter, err error) {
-	var statusCode int
-
-	switch err {
-	case nil:
-		statusCode = http.StatusOK
-	default:
-		statusCode = http.StatusInternalServerError
-	}
-	w.WriteHeader(statusCode)
-}
-
 // Retrieve all the talks dataset and return it in JSON
 func (q Query) GetAllTalks(w http.ResponseWriter, r *http.Request) {
-	talks, err := q.db.GetAllTalks()
+	data, err := q.db.GetAllTalks()
 
 	if err != nil {
 		log.Println("fail to get all talks, error: ", err)
@@ -43,19 +32,41 @@ func (q Query) GetAllTalks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload, err := json.Marshal(talks)
+	writeJsonBody(w, data)
+}
+
+func (q Query) GetTalkAttendees(w http.ResponseWriter, r *http.Request) {
+	var tkid int
+	var err error
+
+	// Extract the talk ID from the request
+	vars := mux.Vars(r)
+	if tkid, err = strconv.Atoi(strings.TrimSpace(vars["id"])); err != nil {
+		log.Println("invalid talk id:", vars["id"], "err:", err)
+		updateHeader(w, database.ErrInvalidTalkID)
+		return
+	}
+
+	// Retrieve all the attendees that have registerted to the talk
+	data, err := q.db.GetAttendees(tkid)
 	if err != nil {
-		log.Println("fail to encode data to the JSON format, error: ", err)
+		log.Println("fail to query talk with id:", tkid)
+		updateHeader(w, err)
+		return
+	}
+
+	writeJsonBody(w, data)
+}
+
+// Populate response body with JSON formatted data
+func writeJsonBody(w http.ResponseWriter, data interface{}) {
+	payload, err := json.Marshal(data)
+	if err != nil {
+		log.Println("fail to encode data to the JSON format, error:", err)
 		updateHeader(w, err)
 		return
 	}
 
 	updateHeader(w, err)
 	w.Write(payload)
-}
-
-func (q Query) GetTalk(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	updateHeader(w, nil)
-	fmt.Fprintf(w, "Handler, GetTalk with vars: %s", vars["id"])
 }
