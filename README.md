@@ -11,7 +11,7 @@ The APIs should:
 
 ## Code Example
 
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+
 
 ## Motivation
 
@@ -24,7 +24,7 @@ This project shows that with proper layering we can easily integrate an existing
 
 ## Installation
 
-For the short term, you have to fetch the sour code from the [Github repo] (https://github.com/puxin71/speech-tracker) and run it as:
+For the short term, you have to fetch the source code from the [Github repo] (https://github.com/puxin71/speech-tracker) and run it as:
 ```
 RESOURCES="./resources" go run server.go
 ```
