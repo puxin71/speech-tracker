@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	const addr = "localhost:8080"
+	const addr = "localhost:3000"
 	idleConnsClosed := make(chan struct{})
 
 	// Configure server routes

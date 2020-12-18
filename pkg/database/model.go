@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// RoleType identifies if the attendant is a speaker or an attendant to a talk
+// RoleType identifies if the attendant is a speaker or an attendee in a talk
 type RoleType int
 
 const (

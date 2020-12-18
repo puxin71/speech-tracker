@@ -6,8 +6,8 @@ This application is a simple REST API server that exposes endpoints to allow acc
 
 ## API Reference
 The APIs should:
-* Fetch all talks and their attendants in response to a valid GET request at /talks
-* Fetch all attendees that are registered to a talk in response to a valid GET request at /talks/[0-9]+/attendees
+* Fetch all talks and their attendants in response to a valid GET request at `/talks`
+* Fetch all attendees that are registered to a talk in response to a valid GET request at `/talks/[0-9]+/attendees`
 
 ## Code Example
 
@@ -15,7 +15,12 @@ Show what the library does as concisely as possible, developers should be able t
 
 ## Motivation
 
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+This project shows that with proper layering we can easily integrate an existing Web Service with different database technologies, i.e:
+* local file system
+* Cloud object store
+* MySQL
+* Postgresql
+* or other Cloud hosted databases
 
 ## Installation
 
@@ -24,15 +29,12 @@ For the short term, you have to fetch the sour code from the [Github repo] (http
 RESOURCES="./resources" go run server.go
 ```
 
-Eventually we can launch the server using Docker
+Eventually we can launch the server and an embedded "database" using Docker
 ## Tests
 
-Describe and show how to run the tests with code examples.
+Run all unit tests as:
+```
+go test -v ./...
+```
 
-## Contributors
-
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
-
-## License
-
-A short snippet describing the license (MIT, Apache, etc.)
+Eventually this step is automated in a Makefile
