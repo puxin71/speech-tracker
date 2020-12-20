@@ -20,7 +20,7 @@ This project shows that with proper layering we can easily integrate an existing
 * Cloud object store
 * MySQL
 * Postgresql
-* or other Cloud hosted databases
+* or the best suited database for the application
 
 ## Installation
 
@@ -37,4 +37,3 @@ Run all unit tests as:
 make test
 ```
 
-Eventually this step is automated in a Makefile

@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	// Our app's URL
+	// Our app's URI
 	Addr = "localhost:3000"
 	// Repeatedly ping the database server to check the connection's status
 	DBConnTickerPeriod = 10 * time.Second

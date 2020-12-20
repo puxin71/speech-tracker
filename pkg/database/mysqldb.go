@@ -17,7 +17,10 @@ const (
 	DbName   = "test_db"
 )
 
+// MySQL database client
 type MySQLDB struct {
+	Querier
+	Upserter
 	db *sql.DB
 }
 
