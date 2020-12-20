@@ -26,10 +26,10 @@ This project shows that with proper layering we can easily integrate an existing
 
 For the short term, you have to fetch the source code from the [Github repo] (https://github.com/puxin71/speech-tracker) and run it as:
 ```
-RESOURCES="./resources" go run server.go
+make compile
+make start-server
 ```
 
-Eventually we can launch the server and an embedded "database" using Docker
 ## Tests
 
 Run all unit tests as:

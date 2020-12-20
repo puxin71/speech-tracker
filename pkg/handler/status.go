@@ -6,6 +6,7 @@ import (
 	"github.com/puxin71/talk-server/pkg/database"
 )
 
+// Map the internal server error to the proper http.statusCode
 func updateHeader(w http.ResponseWriter, err error) {
 	var statusCode int
 

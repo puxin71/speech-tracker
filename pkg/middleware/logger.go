@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Logging the request and response status code for each REST call
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
