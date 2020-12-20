@@ -15,7 +15,7 @@ var (
 	ErrInvalidTalkID = errors.New("Invalid talk ID")
 )
 
-// Loading the dataset from local json files
+// FileLoader provides the Querier service by querying the dataset which are stored in JSON files
 type FileLoader struct {
 	Filename string
 }

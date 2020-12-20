@@ -14,17 +14,17 @@ import (
 
 // Query service which uses the DB service to retrive the dataset
 type Query struct {
-	db database.DB
+	store database.Querier
 }
 
 // Instantiate a query instance
-func NewQuery(db database.DB) Query {
-	return Query{db: db}
+func NewQuery(store database.Store) Query {
+	return Query{store: store}
 }
 
 // Retrieve all the talks dataset and return it in JSON
 func (q Query) GetAllTalks(w http.ResponseWriter, r *http.Request) {
-	data, err := q.db.GetAllTalks()
+	data, err := q.store.GetAllTalks()
 
 	if err != nil {
 		log.Println("fail to get all talks, error: ", err)
@@ -48,9 +48,9 @@ func (q Query) GetTalkAttendees(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve all the attendees that have registerted to the talk
-	data, err := q.db.GetAttendees(tkid)
+	data, err := q.store.GetAttendees(tkid)
 	if err != nil {
-		log.Println("fail to query talk with id:", tkid)
+		log.Println("fail to query talk with id:", tkid, err)
 		updateHeader(w, err)
 		return
 	}

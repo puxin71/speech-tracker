@@ -1,6 +1,10 @@
 package handler
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/puxin71/talk-server/pkg/database"
+)
 
 func updateHeader(w http.ResponseWriter, err error) {
 	var statusCode int
@@ -8,6 +12,8 @@ func updateHeader(w http.ResponseWriter, err error) {
 	switch err {
 	case nil:
 		statusCode = http.StatusOK
+	case database.ErrInvalidTalkID:
+		statusCode = http.StatusNotFound
 	default:
 		statusCode = http.StatusInternalServerError
 	}

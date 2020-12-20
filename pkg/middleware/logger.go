@@ -9,15 +9,27 @@ import (
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
+		sw := StatusWriter{ResponseWriter: w}
 
 		w.Header().Add("Content-Type", "application/json")
-		next.ServeHTTP(w, r)
+		next.ServeHTTP(&sw, r)
 
-		log.Printf(
-			"%s\t%s\t%s",
-			r.Method,
-			r.RequestURI,
-			time.Since(start),
+		log.Println(
+			"Host:", r.Host,
+			"Method:", r.Method,
+			"RequestURI:", r.RemoteAddr,
+			"Status:", http.StatusText(sw.statusCode),
+			"Duration:", time.Since(start),
 		)
 	})
+}
+
+type StatusWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func (w *StatusWriter) WriteHeader(code int) {
+	w.statusCode = code
+	w.ResponseWriter.WriteHeader(code)
 }
