@@ -37,7 +37,6 @@ func TestGetAllTalks(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.Equal(t, "application/json", resp.Header.Get("Content-type"))
-	//assert.Equal(t, "Handler, GetAllTalks", string(body))
 }
 
 func TestGetTalkAttendees(t *testing.T) {

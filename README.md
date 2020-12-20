@@ -24,7 +24,7 @@ This project shows that with proper layering we can easily integrate an existing
 
 ## Installation
 
-For the short term, you have to fetch the source code from the [Github repo] (https://github.com/puxin71/speech-tracker) and run it as:
+Clone the source code from the [Github repo] (https://github.com/puxin71/speech-tracker) and run it as:
 ```
 make compile
 make start-server
@@ -34,7 +34,7 @@ make start-server
 
 Run all unit tests as:
 ```
-go test -v ./...
+make test
 ```
 
 Eventually this step is automated in a Makefile
